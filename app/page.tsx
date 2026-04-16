@@ -1,10 +1,11 @@
 import { createClient } from '@/lib/supabase/server'
-import type { AppWithUser, UserVote } from '@/lib/types'
+import type { AppWithUser, UserVote, Favorite } from '@/lib/types'
 import { AppFeed } from '@/components/feed/AppFeed'
 
 export default async function Home() {
   let apps: AppWithUser[] = []
   let userVotes: UserVote[] = []
+  let favoriteIds: string[] = []
 
   try {
     const supabase = await createClient()
@@ -22,12 +23,13 @@ export default async function Home() {
 
     const { data: { user } } = await supabase.auth.getUser()
     if (user) {
-      const { data: votes } = await supabase
-        .from('votes')
-        .select('app_id, value')
-        .eq('user_id', user.id)
+      const [votesRes, favsRes] = await Promise.all([
+        supabase.from('votes').select('app_id, value').eq('user_id', user.id),
+        supabase.from('favorites').select('app_id').eq('user_id', user.id),
+      ])
 
-      userVotes = (votes as UserVote[]) ?? []
+      userVotes = (votesRes.data as UserVote[]) ?? []
+      favoriteIds = ((favsRes.data as Favorite[]) ?? []).map((f) => f.app_id)
     }
   } catch {
     // Supabase not configured
@@ -46,7 +48,7 @@ export default async function Home() {
           Discover, vote, and showcase what the community is building.
         </p>
       </div>
-      <AppFeed initialApps={apps} userVotes={userVotes} />
+      <AppFeed initialApps={apps} userVotes={userVotes} favoriteIds={favoriteIds} />
     </div>
   )
 }

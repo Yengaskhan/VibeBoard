@@ -44,3 +44,7 @@ export type UserVote = {
   app_id: string
   value: number
 }
+
+export type Favorite = {
+  app_id: string
+}

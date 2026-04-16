@@ -7,6 +7,7 @@ import { ScreenshotGallery } from '@/components/app/ScreenshotGallery'
 import { TagList } from '@/components/app/TagList'
 import { EmbedViewer } from '@/components/app/EmbedViewer'
 import { VoteButton } from '@/components/feed/VoteButton'
+import { FavoriteButton } from '@/components/feed/FavoriteButton'
 
 type Props = {
   params: Promise<{ slug: string }>
@@ -52,6 +53,7 @@ export default async function AppDetailPage({ params }: Props) {
 
   let app: AppWithUser | null = null
   let userVote = 0
+  let isFavorited = false
 
   try {
     const supabase = await createClient()
@@ -69,14 +71,13 @@ export default async function AppDetailPage({ params }: Props) {
 
     const { data: { user } } = await supabase.auth.getUser()
     if (user && app) {
-      const { data: voteData } = await supabase
-        .from('votes')
-        .select('value')
-        .eq('user_id', user.id)
-        .eq('app_id', app.id)
-        .single()
+      const [voteRes, favRes] = await Promise.all([
+        supabase.from('votes').select('value').eq('user_id', user.id).eq('app_id', app.id).single(),
+        supabase.from('favorites').select('id').eq('user_id', user.id).eq('app_id', app.id).single(),
+      ])
 
-      userVote = voteData?.value ?? 0
+      userVote = voteRes.data?.value ?? 0
+      isFavorited = !!favRes.data
     }
   } catch {
     // Supabase not configured
@@ -90,11 +91,14 @@ export default async function AppDetailPage({ params }: Props) {
     <div className="mx-auto max-w-4xl px-4 py-10 sm:px-6 lg:px-8">
       <div className="space-y-8">
         <div className="flex gap-4">
-          <VoteButton
-            appId={app.id}
-            initialVoteCount={app.vote_count}
-            userVote={userVote}
-          />
+          <div className="flex flex-col items-center gap-1">
+            <VoteButton
+              appId={app.id}
+              initialVoteCount={app.vote_count}
+              userVote={userVote}
+            />
+            <FavoriteButton appId={app.id} isFavorited={isFavorited} />
+          </div>
           <div className="flex-1">
             <AppHeader
               title={app.title}

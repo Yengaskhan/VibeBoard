@@ -23,9 +23,11 @@ const getTimeFilterDate = (filter: TimeFilter): Date | null => {
 export const AppFeed = ({
   initialApps,
   userVotes,
+  favoriteIds = [],
 }: {
   initialApps: AppWithUser[]
   userVotes: UserVote[]
+  favoriteIds?: string[]
 }) => {
   const [sort, setSort] = useState<SortMode>('trending')
   const [timeFilter, setTimeFilter] = useState<TimeFilter>('week')
@@ -87,6 +89,7 @@ export const AppFeed = ({
               <AppCard
                 app={app}
                 userVote={voteMap[app.id] ?? 0}
+                isFavorited={favoriteIds.includes(app.id)}
               />
             </div>
           ))}

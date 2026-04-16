@@ -2,13 +2,16 @@ import Link from 'next/link'
 import Image from 'next/image'
 import type { AppWithUser } from '@/lib/types'
 import { VoteButton } from './VoteButton'
+import { FavoriteButton } from './FavoriteButton'
 
 export const AppCard = ({
   app,
   userVote,
+  isFavorited = false,
 }: {
   app: AppWithUser
   userVote: number
+  isFavorited?: boolean
 }) => {
   const tags = app.app_tags?.map((at) => at.tag) ?? []
 
@@ -17,7 +20,6 @@ export const AppCard = ({
       href={`/app/${app.slug}`}
       className="card-glow group relative flex flex-col overflow-hidden rounded-2xl border border-white/[0.06] bg-[#0a0a0f] transition-all duration-500 hover:-translate-y-1 hover:border-white/[0.1] hover:shadow-2xl hover:shadow-purple-500/[0.08]"
     >
-      {/* Screenshot — visual-first, takes up most of the card */}
       <div className="relative aspect-[16/10] w-full overflow-hidden bg-[#111118]">
         {app.screenshot_urls?.[0] ? (
           <Image
@@ -34,10 +36,9 @@ export const AppCard = ({
             </div>
           </div>
         )}
-        {/* Gradient overlay at bottom of image */}
         <div className="absolute inset-x-0 bottom-0 h-20 bg-gradient-to-t from-[#0a0a0f] to-transparent" />
-        {/* Vote button overlay - bottom left of image */}
-        <div className="absolute bottom-3 left-3 z-10" onClick={(e) => e.preventDefault()}>
+        {/* Vote button - bottom left */}
+        <div className="absolute bottom-3 left-3 z-10">
           <div className="flex items-center gap-0.5 rounded-full border border-white/[0.08] bg-black/60 px-1 py-0.5 backdrop-blur-md">
             <VoteButton
               appId={app.id}
@@ -47,9 +48,14 @@ export const AppCard = ({
             />
           </div>
         </div>
+        {/* Favorite button - bottom right */}
+        <div className="absolute bottom-3 right-3 z-10">
+          <div className="rounded-full border border-white/[0.08] bg-black/60 p-0.5 backdrop-blur-md">
+            <FavoriteButton appId={app.id} isFavorited={isFavorited} />
+          </div>
+        </div>
       </div>
 
-      {/* Content */}
       <div className="flex flex-1 flex-col gap-2.5 p-4 pt-3">
         <div>
           <h3 className="text-[15px] font-semibold leading-snug tracking-tight text-white/90 transition-colors group-hover:text-white">

@@ -39,7 +39,7 @@ export async function proxy(request: NextRequest) {
   const { pathname } = request.nextUrl
 
   // Protect /onboarding and /submit — must be logged in
-  if ((pathname === '/onboarding' || pathname === '/submit') && !user) {
+  if ((pathname === '/onboarding' || pathname === '/submit' || pathname === '/favorites') && !user) {
     return NextResponse.redirect(new URL('/', request.url))
   }
 
