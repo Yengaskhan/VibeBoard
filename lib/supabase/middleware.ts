@@ -1,0 +1,72 @@
+import { createServerClient } from '@supabase/ssr'
+import { NextResponse, type NextRequest } from 'next/server'
+
+export const updateSession = async (request: NextRequest) => {
+  let response = NextResponse.next({
+    request: { headers: request.headers },
+  })
+
+  const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL
+  const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
+
+  if (!supabaseUrl || !supabaseAnonKey || !supabaseUrl.startsWith('http')) {
+    return response
+  }
+
+  const supabase = createServerClient(
+    supabaseUrl,
+    supabaseAnonKey,
+    {
+      cookies: {
+        getAll: () => request.cookies.getAll(),
+        setAll: (cookiesToSet) => {
+          cookiesToSet.forEach(({ name, value }) => {
+            request.cookies.set(name, value)
+          })
+          response = NextResponse.next({
+            request,
+          })
+          cookiesToSet.forEach(({ name, value, options }) => {
+            response.cookies.set(name, value, options)
+          })
+        },
+      },
+    }
+  )
+
+  const { data: { user } } = await supabase.auth.getUser()
+
+  const { pathname } = request.nextUrl
+
+  // Protect /onboarding and /submit — must be logged in
+  if ((pathname === '/onboarding' || pathname === '/submit') && !user) {
+    return NextResponse.redirect(new URL('/', request.url))
+  }
+
+  // /submit requires a completed profile
+  if (pathname === '/submit' && user) {
+    const { data: submitProfile } = await supabase
+      .from('users')
+      .select('id')
+      .eq('id', user.id)
+      .single()
+
+    if (!submitProfile) {
+      return NextResponse.redirect(new URL('/onboarding', request.url))
+    }
+  }
+
+  if (pathname === '/onboarding' && user) {
+    const { data: profile } = await supabase
+      .from('users')
+      .select('id')
+      .eq('id', user.id)
+      .single()
+
+    if (profile) {
+      return NextResponse.redirect(new URL('/', request.url))
+    }
+  }
+
+  return response
+}
