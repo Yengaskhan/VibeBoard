@@ -1,0 +1,82 @@
+[
+  {
+    "slug": "nfl-command-center",
+    "status": "enriched",
+    "screenshot": "https://toatrgmwtbumcbcbtumn.supabase.co/storage/v1/object/public/screenshots/enrich/nfl-command-center-0.png"
+  },
+  {
+    "slug": "vector-tango",
+    "status": "render-failed"
+  },
+  {
+    "slug": "cowboy-shooter",
+    "status": "render-failed"
+  },
+  {
+    "slug": "find-my-parking-cops",
+    "status": "render-failed"
+  },
+  {
+    "slug": "panama-playlists",
+    "status": "render-failed"
+  },
+  {
+    "slug": "looksmapping",
+    "status": "enriched",
+    "screenshot": "https://toatrgmwtbumcbcbtumn.supabase.co/storage/v1/object/public/screenshots/enrich/looksmapping-0.png"
+  },
+  {
+    "slug": "img0001",
+    "status": "render-failed"
+  },
+  {
+    "slug": "bop-spotter",
+    "status": "enriched",
+    "screenshot": "https://toatrgmwtbumcbcbtumn.supabase.co/storage/v1/object/public/screenshots/enrich/bop-spotter-0.png"
+  },
+  {
+    "slug": "postal-arbitrage",
+    "status": "enriched",
+    "screenshot": "https://toatrgmwtbumcbcbtumn.supabase.co/storage/v1/object/public/screenshots/enrich/postal-arbitrage-0.png"
+  },
+  {
+    "slug": "menugen",
+    "status": "enriched",
+    "screenshot": "https://toatrgmwtbumcbcbtumn.supabase.co/storage/v1/object/public/screenshots/enrich/menugen-0.png"
+  },
+  {
+    "slug": "my-baby-logger",
+    "status": "enriched",
+    "screenshot": "https://toatrgmwtbumcbcbtumn.supabase.co/storage/v1/object/public/screenshots/enrich/my-baby-logger-0.png"
+  },
+  {
+    "slug": "courtsync-calendar",
+    "status": "enriched",
+    "screenshot": "https://toatrgmwtbumcbcbtumn.supabase.co/storage/v1/object/public/screenshots/enrich/courtsync-calendar-0.png"
+  },
+  {
+    "slug": "jenicards",
+    "status": "enriched",
+    "screenshot": "https://toatrgmwtbumcbcbtumn.supabase.co/storage/v1/object/public/screenshots/enrich/jenicards-0.png"
+  },
+  {
+    "slug": "hn-simulator",
+    "status": "enriched",
+    "screenshot": "https://toatrgmwtbumcbcbtumn.supabase.co/storage/v1/object/public/screenshots/enrich/hn-simulator-0.png"
+  },
+  {
+    "slug": "hn-wrapped-2025",
+    "status": "enriched",
+    "screenshot": "https://toatrgmwtbumcbcbtumn.supabase.co/storage/v1/object/public/screenshots/enrich/hn-wrapped-2025-0.png"
+  },
+  {
+    "slug": "viral-potential-predictor",
+    "status": "enriched",
+    "screenshot": "https://toatrgmwtbumcbcbtumn.supabase.co/storage/v1/object/public/screenshots/enrich/viral-potential-predictor-0.png"
+  },
+  {
+    "slug": "carbscan",
+    "status": "enriched",
+    "screenshot": "https://toatrgmwtbumcbcbtumn.supabase.co/storage/v1/object/public/screenshots/enrich/carbscan-0.png"
+  }
+]

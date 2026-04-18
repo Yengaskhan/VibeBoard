@@ -1,5 +1,39 @@
 # VibeBoard seed scripts
 
+## `enrich-screenshots.mjs`
+
+Generates real screenshots for any app in the DB that doesn't have one yet, using the free [Microlink](https://microlink.io) screenshot API.
+
+### What it does
+
+1. Queries `public.apps` for rows where `screenshot_urls` is null or empty.
+2. For each one, hits Microlink to render a 1440×900 PNG of the page.
+3. Downloads the rendered image and uploads it to the `screenshots` bucket under `enrich/<slug>-0.png`.
+4. Writes the new public URL back to the app's `screenshot_urls` array.
+
+Safe to re-run — rows that already have a screenshot are skipped.
+
+### Usage
+
+```bash
+# See which apps would be processed
+node scripts/enrich-screenshots.mjs --dry-run
+
+# Run for real
+node scripts/enrich-screenshots.mjs
+
+# Only process the first 5 (useful for testing / respecting rate limits)
+node scripts/enrich-screenshots.mjs --limit 5
+```
+
+Microlink's free tier is ~50 requests/day. The script paces at one request every 500ms.
+
+### Requires
+
+Same as the seed script — `SUPABASE_SERVICE_ROLE_KEY` in `.env.local` (needed to UPDATE the apps table).
+
+---
+
 ## `seed-apps.mjs`
 
 Bulk-imports apps from `seed-submissions.md` into Supabase.

@@ -1,0 +1,31 @@
+[
+  {
+    "slug": "vector-tango",
+    "status": "upload-failed",
+    "imgUrl": "https://image.thum.io/get/width/1440/crop/900/https://vector-tango.com"
+  },
+  {
+    "slug": "cowboy-shooter",
+    "status": "enriched",
+    "renderer": "microlink",
+    "screenshot": "https://toatrgmwtbumcbcbtumn.supabase.co/storage/v1/object/public/screenshots/enrich/cowboy-shooter-0.png"
+  },
+  {
+    "slug": "find-my-parking-cops",
+    "status": "enriched",
+    "renderer": "microlink",
+    "screenshot": "https://toatrgmwtbumcbcbtumn.supabase.co/storage/v1/object/public/screenshots/enrich/find-my-parking-cops-0.png"
+  },
+  {
+    "slug": "panama-playlists",
+    "status": "enriched",
+    "renderer": "microlink",
+    "screenshot": "https://toatrgmwtbumcbcbtumn.supabase.co/storage/v1/object/public/screenshots/enrich/panama-playlists-0.png"
+  },
+  {
+    "slug": "img0001",
+    "status": "enriched",
+    "renderer": "microlink",
+    "screenshot": "https://toatrgmwtbumcbcbtumn.supabase.co/storage/v1/object/public/screenshots/enrich/img0001-0.png"
+  }
+]
