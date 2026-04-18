@@ -1,0 +1,162 @@
+[
+  {
+    "name": "Fly",
+    "slug": "fly",
+    "status": "skipped-exists"
+  },
+  {
+    "name": "The Great Taxi Assignment",
+    "slug": "the-great-taxi-assignment",
+    "status": "skipped-exists"
+  },
+  {
+    "name": "Vibeware",
+    "slug": "vibeware",
+    "status": "skipped-exists"
+  },
+  {
+    "name": "Vector Tango",
+    "slug": "vector-tango",
+    "status": "skipped-exists"
+  },
+  {
+    "name": "Cowboy Shooter",
+    "slug": "cowboy-shooter",
+    "status": "skipped-exists"
+  },
+  {
+    "name": "Vibe Sail",
+    "slug": "vibe-sail",
+    "status": "skipped-exists"
+  },
+  {
+    "name": "DOOMscroll",
+    "slug": "doomscroll",
+    "status": "skipped-exists"
+  },
+  {
+    "name": "Poker Slam",
+    "slug": "poker-slam",
+    "status": "skipped-native"
+  },
+  {
+    "name": "Jmail",
+    "slug": "jmail",
+    "status": "skipped-exists"
+  },
+  {
+    "name": "Find My Parking Cops",
+    "slug": "find-my-parking-cops",
+    "status": "skipped-exists"
+  },
+  {
+    "name": "Panama Playlists",
+    "slug": "panama-playlists",
+    "status": "skipped-exists"
+  },
+  {
+    "name": "Looksmapping",
+    "slug": "looksmapping",
+    "status": "skipped-exists"
+  },
+  {
+    "name": "IMG_0001",
+    "slug": "img0001",
+    "status": "skipped-exists"
+  },
+  {
+    "name": "Bop Spotter",
+    "slug": "bop-spotter",
+    "status": "skipped-exists"
+  },
+  {
+    "name": "Postal Arbitrage",
+    "slug": "postal-arbitrage",
+    "status": "skipped-exists"
+  },
+  {
+    "name": "MenuGen",
+    "slug": "menugen",
+    "status": "skipped-exists"
+  },
+  {
+    "name": "How Many Layers",
+    "slug": "how-many-layers",
+    "status": "skipped-exists"
+  },
+  {
+    "name": "My Baby Logger",
+    "slug": "my-baby-logger",
+    "status": "skipped-exists"
+  },
+  {
+    "name": "Flowbound",
+    "slug": "flowbound",
+    "status": "skipped-exists"
+  },
+  {
+    "name": "CourtSync Calendar",
+    "slug": "courtsync-calendar",
+    "status": "skipped-exists"
+  },
+  {
+    "name": "PrintPigeon",
+    "slug": "printpigeon",
+    "status": "skipped-exists"
+  },
+  {
+    "name": "DummyForms",
+    "slug": "dummyforms",
+    "status": "skipped-exists"
+  },
+  {
+    "name": "Mealmuse",
+    "slug": "mealmuse",
+    "status": "skipped-exists"
+  },
+  {
+    "name": "Mixcard",
+    "slug": "mixcard",
+    "status": "skipped-exists"
+  },
+  {
+    "name": "JeniCards",
+    "slug": "jenicards",
+    "status": "skipped-exists"
+  },
+  {
+    "name": "Storypot",
+    "slug": "storypot",
+    "status": "skipped-exists"
+  },
+  {
+    "name": "HN Simulator",
+    "slug": "hn-simulator",
+    "status": "skipped-exists"
+  },
+  {
+    "name": "HN Wrapped 2025",
+    "slug": "hn-wrapped-2025",
+    "status": "skipped-exists"
+  },
+  {
+    "name": "Viral Potential Predictor",
+    "slug": "viral-potential-predictor",
+    "status": "skipped-exists"
+  },
+  {
+    "name": "Refetch",
+    "slug": "refetch",
+    "status": "skipped-exists"
+  },
+  {
+    "name": "CarbScan",
+    "slug": "carbscan",
+    "status": "skipped-exists"
+  },
+  {
+    "name": "Pouched",
+    "slug": "pouched",
+    "status": "skipped-native"
+  }
+]

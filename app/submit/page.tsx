@@ -5,6 +5,7 @@ import { generateUniqueSlug } from '@/lib/utils'
 import { CharCounter } from '@/components/submit/CharCounter'
 import { TagSelect } from '@/components/submit/TagSelect'
 import { ScreenshotUpload } from '@/components/submit/ScreenshotUpload'
+import { UrlImporter } from '@/components/submit/UrlImporter'
 import { useRouter } from 'next/navigation'
 import { useState } from 'react'
 
@@ -44,6 +45,27 @@ export default function SubmitPage() {
     return Object.keys(errors).length === 0
   }
 
+  const handleImported = (meta: {
+    url: string
+    title: string | null
+    description: string | null
+    image: string | null
+  }) => {
+    // Always set the URL (the imported one)
+    setUrl(meta.url)
+    setFieldErrors((p) => ({ ...p, url: '' }))
+
+    // Only overwrite title/description if they're blank — don't trash the user's edits
+    if (meta.title && !title.trim()) {
+      setTitle(meta.title)
+      setFieldErrors((p) => ({ ...p, title: '' }))
+    }
+    if (meta.description && !shortDescription.trim()) {
+      setShortDescription(meta.description.slice(0, 280))
+      setFieldErrors((p) => ({ ...p, shortDescription: '' }))
+    }
+  }
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     setError('')
@@ -56,7 +78,6 @@ export default function SubmitPage() {
       const { data: { user } } = await supabase.auth.getUser()
       if (!user) { setError('Not authenticated. Please sign in and try again.'); setSubmitting(false); return }
 
-      // Upload screenshots
       const screenshotUrls: string[] = []
       for (let i = 0; i < screenshots.length; i++) {
         const path = `${user.id}/${Date.now()}-${i}.webp`
@@ -123,19 +144,45 @@ export default function SubmitPage() {
     `mt-1.5 w-full rounded-xl border bg-white/[0.02] px-3.5 py-2.5 text-[14px] text-white placeholder-white/20 outline-none transition-all ${
       field && fieldErrors[field]
         ? 'border-rose-500/50 focus:border-rose-500/70 focus:ring-1 focus:ring-rose-500/30'
-        : 'border-white/[0.06] focus:border-[#7c3aed]/50 focus:ring-1 focus:ring-[#7c3aed]/20'
+        : 'border-white/[0.06] focus:border-[#bfff3c]/50 focus:ring-1 focus:ring-[#bfff3c]/20'
     }`
 
   return (
     <div className="relative z-10 flex flex-1 justify-center px-5 py-10 sm:px-8">
       <div className="w-full max-w-2xl">
-        <h1 className="text-[28px] font-bold tracking-tight text-white">Submit an App</h1>
-        <p className="mt-1.5 text-[15px] text-white/30">Share what you&apos;ve built with the community.</p>
+        {/* Eyebrow */}
+        <div className="flex items-center gap-2">
+          <span className="h-1 w-1 rounded-full bg-[#bfff3c]" />
+          <p className="font-mono text-[10px] uppercase tracking-[0.25em] text-[#bfff3c]/80">
+            / new drop
+          </p>
+        </div>
 
-        <form onSubmit={handleSubmit} className="mt-10 space-y-6">
+        <h1 className="mt-3 font-display text-[40px] italic leading-[1.05] text-white sm:text-[48px]">
+          Submit an app
+        </h1>
+        <p className="mt-2 text-[15px] text-white/40">
+          Share what you&apos;ve built. Paste a URL and we&apos;ll autofill the rest.
+        </p>
+
+        {/* URL Importer — the fastest path to a complete form */}
+        <div className="mt-8">
+          <UrlImporter onImported={handleImported} />
+        </div>
+
+        {/* Divider */}
+        <div className="mt-8 flex items-center gap-3">
+          <div className="h-px flex-1 bg-white/[0.06]" />
+          <span className="font-mono text-[10px] uppercase tracking-[0.25em] text-white/20">
+            or enter manually
+          </span>
+          <div className="h-px flex-1 bg-white/[0.06]" />
+        </div>
+
+        <form onSubmit={handleSubmit} className="mt-8 space-y-6">
           <div>
             <label htmlFor="title" className="block text-[13px] font-medium text-white/50">
-              Title <span className="text-[#7c3aed]">*</span>
+              Title <span className="text-[#bfff3c]">*</span>
             </label>
             <input
               id="title"
@@ -151,7 +198,7 @@ export default function SubmitPage() {
           <div>
             <div className="flex items-center justify-between">
               <label htmlFor="shortDesc" className="block text-[13px] font-medium text-white/50">
-                Short Description <span className="text-[#7c3aed]">*</span>
+                Short Description <span className="text-[#bfff3c]">*</span>
               </label>
               <CharCounter current={shortDescription.length} max={280} />
             </div>
@@ -182,7 +229,7 @@ export default function SubmitPage() {
 
           <div>
             <label htmlFor="url" className="block text-[13px] font-medium text-white/50">
-              App URL <span className="text-[#7c3aed]">*</span>
+              App URL <span className="text-[#bfff3c]">*</span>
             </label>
             <input
               id="url"
@@ -230,7 +277,7 @@ export default function SubmitPage() {
           <button
             type="submit"
             disabled={submitting}
-            className="w-full rounded-xl bg-gradient-to-r from-[#7c3aed] to-[#6d28d9] px-4 py-3 text-[14px] font-semibold text-white shadow-lg shadow-purple-500/20 transition-all hover:shadow-purple-500/30 hover:brightness-110 disabled:cursor-not-allowed disabled:opacity-50"
+            className="btn-accent w-full rounded-xl px-4 py-3 text-[14px] font-semibold disabled:cursor-not-allowed disabled:opacity-50"
           >
             {submitting ? (
               <span className="flex items-center justify-center gap-2">
@@ -240,7 +287,7 @@ export default function SubmitPage() {
                 </svg>
                 Submitting...
               </span>
-            ) : 'Submit App'}
+            ) : 'Submit app'}
           </button>
         </form>
       </div>

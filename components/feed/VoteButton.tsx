@@ -17,6 +17,25 @@ export const VoteButton = ({
   const [voteCount, setVoteCount] = useState(initialVoteCount)
   const [currentVote, setCurrentVote] = useState(initialUserVote)
   const [voting, setVoting] = useState(false)
+  const [burst, setBurst] = useState(false)
+  const [pulse, setPulse] = useState(false)
+
+  const triggerBurst = () => {
+    setBurst(false)
+    // Force reflow then trigger
+    requestAnimationFrame(() => {
+      setBurst(true)
+      setTimeout(() => setBurst(false), 700)
+    })
+  }
+
+  const triggerPulse = () => {
+    setPulse(false)
+    requestAnimationFrame(() => {
+      setPulse(true)
+      setTimeout(() => setPulse(false), 500)
+    })
+  }
 
   const vote = async (value: 1 | -1) => {
     if (voting) return
@@ -43,6 +62,8 @@ export const VoteButton = ({
     } else {
       setCurrentVote(value)
       setVoteCount(voteCount - prevVote + value)
+      if (value === 1) triggerBurst()
+      triggerPulse()
     }
 
     try {
@@ -63,37 +84,78 @@ export const VoteButton = ({
   }
 
   const isHorizontal = layout === 'horizontal'
+  const iconSize = isHorizontal ? 'h-[14px] w-[14px]' : 'h-[18px] w-[18px]'
 
   return (
-    <div className={`flex items-center ${isHorizontal ? 'flex-row gap-1' : 'flex-col gap-0'}`}>
-      <button
-        onClick={(e) => { e.preventDefault(); e.stopPropagation(); vote(1) }}
-        className={`group/vote rounded-md p-1 transition-all ${
+    <div className={`flex items-center ${isHorizontal ? 'flex-row gap-0.5' : 'flex-col gap-0'}`}>
+      <div className={`relative ${burst ? 'burst-active' : ''}`}>
+        {/* Particles */}
+        {[0, 1, 2, 3, 4, 5].map((i) => (
+          <span
+            key={i}
+            className={`particle particle-${i}`}
+            style={{
+              top: isHorizontal ? '50%' : '10px',
+              left: '50%',
+              transform: 'translate(-50%, -50%)',
+            }}
+          />
+        ))}
+        <button
+          onClick={(e) => { e.preventDefault(); e.stopPropagation(); vote(1) }}
+          className={`relative rounded-md p-1 transition-all ${
+            currentVote === 1
+              ? 'text-[#bfff3c] drop-shadow-[0_0_6px_rgba(191,255,60,0.6)]'
+              : 'text-white/30 hover:text-white/70'
+          }`}
+          aria-label="Boost"
+        >
+          <svg
+            className={`${iconSize} transition-transform`}
+            fill={currentVote === 1 ? 'currentColor' : 'none'}
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+            strokeWidth={currentVote === 1 ? 0 : 2}
+          >
+            <path strokeLinecap="round" strokeLinejoin="round" d="M5 15l7-7 7 7" />
+          </svg>
+        </button>
+      </div>
+
+      <span
+        className={`${
+          isHorizontal
+            ? 'min-w-[22px] text-center text-[11px]'
+            : 'text-[13px]'
+        } font-display italic tabular-nums ${
+          pulse ? 'vote-pulse' : ''
+        } ${
           currentVote === 1
-            ? 'text-[#7c3aed]'
-            : 'text-white/20 hover:text-white/50'
+            ? 'text-[#bfff3c]'
+            : currentVote === -1
+              ? 'text-[#ff6b3c]'
+              : 'text-white/60'
         }`}
-        aria-label="Upvote"
       >
-        <svg className={`${isHorizontal ? 'h-4 w-4' : 'h-[18px] w-[18px]'} transition-transform group-hover/vote:scale-110`} fill={currentVote === 1 ? 'currentColor' : 'none'} viewBox="0 0 24 24" stroke="currentColor" strokeWidth={currentVote === 1 ? 0 : 2}>
-          <path strokeLinecap="round" strokeLinejoin="round" d="M5 15l7-7 7 7" />
-        </svg>
-      </button>
-      <span className={`${isHorizontal ? 'text-xs min-w-[20px] text-center' : 'text-[13px]'} font-bold tabular-nums ${
-        currentVote === 1 ? 'text-[#7c3aed]' : currentVote === -1 ? 'text-rose-400' : 'text-white/40'
-      }`}>
         {voteCount}
       </span>
+
       <button
         onClick={(e) => { e.preventDefault(); e.stopPropagation(); vote(-1) }}
-        className={`group/vote rounded-md p-1 transition-all ${
+        className={`rounded-md p-1 transition-all ${
           currentVote === -1
-            ? 'text-rose-400'
+            ? 'text-[#ff6b3c]'
             : 'text-white/20 hover:text-white/50'
         }`}
         aria-label="Downvote"
       >
-        <svg className={`${isHorizontal ? 'h-4 w-4' : 'h-[18px] w-[18px]'} transition-transform group-hover/vote:scale-110`} fill={currentVote === -1 ? 'currentColor' : 'none'} viewBox="0 0 24 24" stroke="currentColor" strokeWidth={currentVote === -1 ? 0 : 2}>
+        <svg
+          className={iconSize}
+          fill={currentVote === -1 ? 'currentColor' : 'none'}
+          viewBox="0 0 24 24"
+          stroke="currentColor"
+          strokeWidth={currentVote === -1 ? 0 : 2}
+        >
           <path strokeLinecap="round" strokeLinejoin="round" d="M19 9l-7 7-7-7" />
         </svg>
       </button>

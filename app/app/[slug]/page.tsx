@@ -86,42 +86,98 @@ export default async function AppDetailPage({ params }: Props) {
   if (!app) notFound()
 
   const tags = app.app_tags?.map((at) => at.tag) ?? []
+  const dateStr = new Date(app.created_at).toLocaleDateString('en-US', {
+    month: 'long',
+    day: 'numeric',
+    year: 'numeric',
+  })
 
   return (
-    <div className="mx-auto max-w-4xl px-4 py-10 sm:px-6 lg:px-8">
-      <div className="space-y-8">
-        <div className="flex gap-4">
-          <div className="flex flex-col items-center gap-1">
+    <article className="relative z-10 mx-auto max-w-5xl px-5 py-10 sm:px-8 sm:py-16">
+      {/* Metadata strip */}
+      <div className="mb-10 flex flex-wrap items-center gap-x-4 gap-y-2 border-b border-white/[0.06] pb-5 font-mono text-[10px] uppercase tracking-[0.22em] text-white/30">
+        <span>Shipped · {dateStr}</span>
+        <span className="text-white/15">—</span>
+        <span>
+          <span className="text-[#bfff3c]">{app.vote_count}</span> boost{app.vote_count === 1 ? '' : 's'}
+        </span>
+        {tags[0] && (
+          <>
+            <span className="text-white/15">—</span>
+            <span>File: {tags[0].name}</span>
+          </>
+        )}
+      </div>
+
+      {/* Two-column hero: content left, floating actions right */}
+      <div className="grid gap-10 lg:grid-cols-[1fr_auto]">
+        <div>
+          <AppHeader
+            title={app.title}
+            shortDescription={app.short_description}
+            user={app.user!}
+            url={app.url}
+          />
+        </div>
+
+        {/* Floating vote/fav panel */}
+        <aside className="flex flex-row items-center gap-2 self-start rounded-2xl border border-white/[0.08] bg-white/[0.02] p-2 backdrop-blur-sm lg:flex-col lg:gap-3 lg:p-3">
+          <div className="flex flex-row items-center gap-1 rounded-xl bg-black/40 px-2 py-1 lg:flex-col lg:px-1 lg:py-2">
             <VoteButton
               appId={app.id}
               initialVoteCount={app.vote_count}
               userVote={userVote}
             />
+          </div>
+          <div className="rounded-xl bg-black/40 p-1.5">
             <FavoriteButton appId={app.id} isFavorited={isFavorited} />
           </div>
-          <div className="flex-1">
-            <AppHeader
-              title={app.title}
-              shortDescription={app.short_description}
-              user={app.user}
-              url={app.url}
-            />
-          </div>
-        </div>
-
-        <ScreenshotGallery urls={app.screenshot_urls ?? []} />
-
-        <TagList tags={tags} />
-
-        {app.long_description && (
-          <section>
-            <h2 className="text-lg font-semibold text-white">About</h2>
-            <p className="mt-2 whitespace-pre-wrap text-zinc-400">{app.long_description}</p>
-          </section>
-        )}
-
-        {app.embed_code && <EmbedViewer embedCode={app.embed_code} />}
+        </aside>
       </div>
-    </div>
+
+      {/* Featured screenshot — hero image */}
+      <div className="mt-12">
+        <ScreenshotGallery urls={app.screenshot_urls ?? []} />
+      </div>
+
+      {/* Tags */}
+      {tags.length > 0 && (
+        <div className="mt-8">
+          <TagList tags={tags} />
+        </div>
+      )}
+
+      {/* About - editorial column */}
+      {app.long_description && (
+        <section className="mt-14 grid gap-10 lg:grid-cols-[200px_1fr]">
+          <div>
+            <p className="font-mono text-[10px] uppercase tracking-[0.25em] text-[#bfff3c]/70">
+              / the story
+            </p>
+            <h2 className="mt-3 font-display text-[28px] italic leading-tight text-white">
+              About this build
+            </h2>
+          </div>
+          <div className="max-w-2xl">
+            <p className="whitespace-pre-wrap text-[16px] leading-[1.75] text-white/70">
+              {app.long_description}
+            </p>
+          </div>
+        </section>
+      )}
+
+      {/* Embed / Try It */}
+      {app.embed_code && (
+        <div className="mt-14">
+          <EmbedViewer embedCode={app.embed_code} />
+        </div>
+      )}
+
+      {/* Footer signature */}
+      <div className="mt-20 flex items-center justify-between border-t border-white/[0.06] pt-6 font-mono text-[10px] uppercase tracking-[0.22em] text-white/25">
+        <span>VibeBoard · /app/{app.slug}</span>
+        <span className="text-[#bfff3c]/50">— end of drop —</span>
+      </div>
+    </article>
   )
 }

@@ -35,19 +35,54 @@ export default async function Home() {
     // Supabase not configured
   }
 
+  const totalApps = apps.length
+
   return (
-    <div className="relative z-10 mx-auto max-w-7xl px-5 py-10 sm:px-8">
-      <div className="mb-10">
-        <h1 className="text-[28px] font-bold tracking-tight text-white sm:text-4xl">
-          The best AI-built apps,{' '}
-          <span className="bg-gradient-to-r from-[#7c3aed] to-[#06b6d4] bg-clip-text text-transparent">
-            curated.
+    <div className="relative z-10 mx-auto max-w-7xl px-5 py-10 sm:px-8 sm:py-16">
+      {/* Hero */}
+      <header className="mb-12 sm:mb-16">
+        <div className="flex items-center gap-2">
+          <span className="inline-block h-1.5 w-1.5 rounded-full bg-[#bfff3c] blink-dot" />
+          <p className="font-mono text-[10px] uppercase tracking-[0.3em] text-[#bfff3c]/80">
+            Issue 001 · Live &amp; shipping
+          </p>
+        </div>
+
+        <h1 className="mt-6 font-display text-[48px] italic leading-[0.95] tracking-tight text-white sm:text-[88px]">
+          The best apps,{' '}
+          <span className="relative inline-block">
+            <span className="relative z-10">built with</span>
           </span>
+          <br />
+          <span className="text-[#bfff3c]">vibes</span> <span className="text-white/20">&amp;</span> taste.
         </h1>
-        <p className="mt-2 text-[15px] text-white/30">
-          Discover, vote, and showcase what the community is building.
-        </p>
-      </div>
+
+        <div className="mt-6 flex flex-wrap items-end justify-between gap-6">
+          <p className="max-w-xl text-[15px] leading-relaxed text-white/45 sm:text-[17px]">
+            A curated showcase of apps built fast, built weird, built well. One honest feed for
+            the builders actually shipping.
+          </p>
+
+          {/* Stats strip */}
+          <div className="flex items-baseline gap-5 font-mono text-[11px] uppercase tracking-[0.22em] text-white/30">
+            <span className="flex items-baseline gap-1.5">
+              <span className="text-[24px] font-display not-italic leading-none tracking-tight text-white">
+                {totalApps}
+              </span>
+              apps
+            </span>
+            <span className="h-6 w-px bg-white/10" />
+            <span className="flex items-baseline gap-1.5">
+              <span className="text-[24px] font-display not-italic leading-none tracking-tight text-[#bfff3c]">
+                24/7
+              </span>
+              live
+            </span>
+          </div>
+        </div>
+      </header>
+
+      {/* Feed */}
       <AppFeed initialApps={apps} userVotes={userVotes} favoriteIds={favoriteIds} />
     </div>
   )
