@@ -9,6 +9,8 @@ export type App = {
   screenshot_urls: string[]
   user_id: string
   vote_count: number
+  favorite_count: number
+  visits: number
   created_at: string
 }
 

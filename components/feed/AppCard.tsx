@@ -3,6 +3,7 @@ import Image from 'next/image'
 import type { AppWithUser } from '@/lib/types'
 import { VoteButton } from './VoteButton'
 import { FavoriteButton } from './FavoriteButton'
+import { TrackedLink } from './TrackedLink'
 
 type Variant = 'default' | 'wide' | 'featured'
 
@@ -35,11 +36,11 @@ export const AppCard = ({
   // Small "Details" link in the corner = go to the editorial detail page (secondary)
   return (
     <div className="tilt-card group relative flex h-full flex-col overflow-hidden rounded-2xl border border-white/[0.06] bg-[#101014]">
-      {/* Primary click target — transparent anchor covering the whole card */}
-      <a
+      {/* Primary click target — transparent anchor covering the whole card.
+          TrackedLink fires increment_app_visits RPC on click/middle-click/cmd-click. */}
+      <TrackedLink
         href={app.url}
-        target="_blank"
-        rel="noopener noreferrer"
+        appId={app.id}
         aria-label={`Visit ${app.title}`}
         className="absolute inset-0 z-10"
       />

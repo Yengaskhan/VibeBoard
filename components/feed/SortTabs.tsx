@@ -2,13 +2,14 @@
 
 import { useEffect, useRef, useState } from 'react'
 
-export type SortMode = 'trending' | 'new' | 'top'
+export type SortMode = 'trending' | 'new' | 'top' | 'loved'
 export type TimeFilter = 'today' | 'week' | 'month' | 'all'
 
 const TABS: { label: string, value: SortMode }[] = [
   { label: 'Trending', value: 'trending' },
   { label: 'New', value: 'new' },
   { label: 'Top', value: 'top' },
+  { label: 'Loved', value: 'loved' },
 ]
 
 const TIME_OPTIONS: { label: string, value: TimeFilter }[] = [
@@ -92,7 +93,13 @@ export const SortTabs = ({
       {/* Section label */}
       <div className="ml-auto hidden items-baseline gap-2 sm:flex">
         <span className="font-mono text-[10px] uppercase tracking-[0.2em] text-white/25">
-          {sort === 'trending' ? '/ live ranking' : sort === 'new' ? '/ latest drops' : '/ leaderboard'}
+          {sort === 'trending'
+            ? '/ live ranking'
+            : sort === 'new'
+              ? '/ latest drops'
+              : sort === 'loved'
+                ? '/ cult favorites'
+                : '/ leaderboard'}
         </span>
       </div>
     </div>

@@ -1,0 +1,26 @@
+[
+  {
+    "slug": "hn-simulator",
+    "status": "enriched",
+    "renderer": "microlink",
+    "screenshot": "https://toatrgmwtbumcbcbtumn.supabase.co/storage/v1/object/public/screenshots/enrich/hn-simulator-0.png"
+  },
+  {
+    "slug": "hn-wrapped-2025",
+    "status": "enriched",
+    "renderer": "microlink",
+    "screenshot": "https://toatrgmwtbumcbcbtumn.supabase.co/storage/v1/object/public/screenshots/enrich/hn-wrapped-2025-0.png"
+  },
+  {
+    "slug": "viral-potential-predictor",
+    "status": "enriched",
+    "renderer": "microlink",
+    "screenshot": "https://toatrgmwtbumcbcbtumn.supabase.co/storage/v1/object/public/screenshots/enrich/viral-potential-predictor-0.png"
+  },
+  {
+    "slug": "carbscan",
+    "status": "enriched",
+    "renderer": "microlink",
+    "screenshot": "https://toatrgmwtbumcbcbtumn.supabase.co/storage/v1/object/public/screenshots/enrich/carbscan-0.png"
+  }
+]

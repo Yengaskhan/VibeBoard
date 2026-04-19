@@ -42,19 +42,33 @@ export const AppFeed = ({
     let apps = [...initialApps]
 
     if (sort === 'trending') {
+      // Composite score: votes weighted heaviest, then favorites, then clicks —
+      // all decayed by time since submission. Lets multiple signals bubble apps up.
       apps.sort((a, b) => {
-        const scoreA = a.vote_count / Math.pow(getHoursSince(a.created_at), 1.8)
-        const scoreB = b.vote_count / Math.pow(getHoursSince(b.created_at), 1.8)
+        const rawA = a.vote_count * 2 + (a.favorite_count ?? 0) * 1.5 + (a.visits ?? 0) * 0.1
+        const rawB = b.vote_count * 2 + (b.favorite_count ?? 0) * 1.5 + (b.visits ?? 0) * 0.1
+        const scoreA = rawA / Math.pow(getHoursSince(a.created_at), 1.8)
+        const scoreB = rawB / Math.pow(getHoursSince(b.created_at), 1.8)
         return scoreB - scoreA
       })
     } else if (sort === 'new') {
       apps.sort((a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime())
     } else if (sort === 'top') {
+      // Pure vote leaderboard, time-filtered. Unchanged.
       const cutoff = getTimeFilterDate(timeFilter)
       if (cutoff) {
         apps = apps.filter((a) => new Date(a.created_at) >= cutoff)
       }
       apps.sort((a, b) => b.vote_count - a.vote_count)
+    } else if (sort === 'loved') {
+      // Favorite-to-vote ratio with Bayesian smoothing (+3 denominator) so new apps
+      // with 1 vote and 1 favorite don't dominate. Only apps with ≥1 favorite show up.
+      apps = apps.filter((a) => (a.favorite_count ?? 0) >= 1)
+      apps.sort((a, b) => {
+        const ratioA = (a.favorite_count ?? 0) / ((a.vote_count ?? 0) + 3)
+        const ratioB = (b.favorite_count ?? 0) / ((b.vote_count ?? 0) + 3)
+        return ratioB - ratioA
+      })
     }
 
     return apps
