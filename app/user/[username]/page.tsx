@@ -11,23 +11,58 @@ type Props = {
 
 export const generateMetadata = async ({ params }: Props): Promise<Metadata> => {
   const { username } = await params
+  const canonical = `/user/${username}`
 
   try {
     const supabase = await createClient()
     const { data: user } = await supabase
       .from('users')
-      .select('display_name, bio')
+      .select('display_name, bio, avatar_url')
       .eq('username', username)
       .single()
 
-    if (!user) return { title: 'User Not Found | VibeBoard' }
+    if (!user) return { title: 'User not found', robots: { index: false } }
+
+    const description = user.bio
+      ? user.bio
+      : `${user.display_name} is shipping on VibeBoard — check out their AI-built apps.`
+
+    // Use avatar as OG image if available, else branded /api/og card
+    const avatar = user.avatar_url
+    const fallbackOg = `/api/og?title=${encodeURIComponent(user.display_name)}&description=${encodeURIComponent(description)}&tag=BUILDER%20PROFILE`
+    const imageUrl = avatar ?? fallbackOg
 
     return {
-      title: `${user.display_name} | VibeBoard`,
-      description: user.bio ?? `${user.display_name} on VibeBoard`,
+      title: user.display_name,
+      description,
+      alternates: { canonical },
+      openGraph: {
+        type: 'profile',
+        url: canonical,
+        siteName: 'VibeBoard',
+        title: `${user.display_name} · VibeBoard`,
+        description,
+        images: [
+          {
+            url: imageUrl,
+            width: avatar ? 400 : 1200,
+            height: avatar ? 400 : 630,
+            alt: user.display_name,
+          },
+        ],
+      },
+      twitter: {
+        card: avatar ? 'summary' : 'summary_large_image',
+        title: `${user.display_name} · VibeBoard`,
+        description,
+        images: [imageUrl],
+      },
     }
   } catch {
-    return { title: 'VibeBoard' }
+    return {
+      title: 'VibeBoard',
+      alternates: { canonical },
+    }
   }
 }
 

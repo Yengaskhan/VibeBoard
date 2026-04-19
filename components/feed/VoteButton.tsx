@@ -1,6 +1,7 @@
 'use client'
 
 import { createClient } from '@/lib/supabase/client'
+import { AuthModal } from '@/components/auth/AuthModal'
 import { useState } from 'react'
 
 export const VoteButton = ({
@@ -19,6 +20,7 @@ export const VoteButton = ({
   const [voting, setVoting] = useState(false)
   const [burst, setBurst] = useState(false)
   const [pulse, setPulse] = useState(false)
+  const [modalVote, setModalVote] = useState<1 | -1 | null>(null)
 
   const triggerBurst = () => {
     setBurst(false)
@@ -44,10 +46,9 @@ export const VoteButton = ({
     const { data: { user } } = await supabase.auth.getUser()
 
     if (!user) {
-      await supabase.auth.signInWithOAuth({
-        provider: 'github',
-        options: { redirectTo: `${window.location.origin}/auth/callback` },
-      })
+      // Open inline auth modal instead of redirecting immediately.
+      // The user's intended vote is captured here and replayed after OAuth.
+      setModalVote(value)
       return
     }
 
@@ -87,6 +88,7 @@ export const VoteButton = ({
   const iconSize = isHorizontal ? 'h-[14px] w-[14px]' : 'h-[18px] w-[18px]'
 
   return (
+    <>
     <div className={`flex items-center ${isHorizontal ? 'flex-row gap-0.5' : 'flex-col gap-0'}`}>
       <div className={`relative ${burst ? 'burst-active' : ''}`}>
         {/* Particles */}
@@ -160,5 +162,15 @@ export const VoteButton = ({
         </svg>
       </button>
     </div>
+
+    {modalVote !== null && (
+      <AuthModal
+        open={true}
+        onClose={() => setModalVote(null)}
+        purpose="vote"
+        pendingAction={{ type: 'vote', appId, value: modalVote }}
+      />
+    )}
+    </>
   )
 }

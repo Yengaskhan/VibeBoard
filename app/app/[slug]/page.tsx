@@ -15,36 +15,70 @@ type Props = {
 
 export const generateMetadata = async ({ params }: Props): Promise<Metadata> => {
   const { slug } = await params
+  const canonical = `/app/${slug}`
 
   try {
     const supabase = await createClient()
     const { data: app } = await supabase
       .from('apps')
-      .select('title, short_description, screenshot_urls')
+      .select(`
+        title,
+        short_description,
+        screenshot_urls,
+        user:users(display_name)
+      `)
       .eq('slug', slug)
-      .single()
+      .single() as {
+        data: {
+          title: string
+          short_description: string
+          screenshot_urls: string[] | null
+          user: { display_name: string } | null
+        } | null
+      }
 
-    if (!app) return { title: 'App Not Found | VibeBoard' }
+    if (!app) return { title: 'App not found', robots: { index: false } }
 
-    const ogImage = app.screenshot_urls?.[0] ?? undefined
+    // Prefer the real app screenshot as OG image (most visually compelling).
+    // Fall back to the branded /api/og endpoint if no screenshot exists.
+    const nativeImage = app.screenshot_urls?.[0]
+    const fallbackOg = `/api/og?title=${encodeURIComponent(app.title)}&description=${encodeURIComponent(app.short_description)}${
+      app.user?.display_name ? `&creator=${encodeURIComponent(app.user.display_name)}` : ''
+    }`
+    const imageUrl = nativeImage ?? fallbackOg
 
     return {
-      title: `${app.title} | VibeBoard`,
+      title: app.title,
       description: app.short_description,
+      alternates: { canonical },
       openGraph: {
-        title: app.title,
+        type: 'article',
+        url: canonical,
+        siteName: 'VibeBoard',
+        title: `${app.title} · VibeBoard`,
         description: app.short_description,
-        images: ogImage ? [ogImage] : [],
+        images: [
+          {
+            url: imageUrl,
+            width: 1200,
+            height: 630,
+            alt: app.title,
+          },
+        ],
       },
       twitter: {
         card: 'summary_large_image',
-        title: app.title,
+        title: `${app.title} · VibeBoard`,
         description: app.short_description,
-        images: ogImage ? [ogImage] : [],
+        images: [imageUrl],
+        creator: app.user?.display_name ? `@${app.user.display_name}` : undefined,
       },
     }
   } catch {
-    return { title: 'VibeBoard' }
+    return {
+      title: 'VibeBoard',
+      alternates: { canonical },
+    }
   }
 }
 

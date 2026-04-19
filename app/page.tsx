@@ -1,6 +1,31 @@
+import type { Metadata } from 'next'
 import { createClient } from '@/lib/supabase/server'
 import type { AppWithUser, UserVote, Favorite } from '@/lib/types'
 import { AppFeed } from '@/components/feed/AppFeed'
+
+export const metadata: Metadata = {
+  // Root layout `title.template` applies automatically, producing:
+  // "Discover AI-built apps · VibeBoard"
+  title: 'Discover AI-built apps',
+  description:
+    'The best AI-built apps, curated. Explore what indie builders are shipping — vote, save favorites, and submit your own.',
+  alternates: { canonical: '/' },
+  openGraph: {
+    type: 'website',
+    url: '/',
+    title: 'VibeBoard — AI-built apps, curated',
+    description:
+      'The best AI-built apps, curated. Explore what indie builders are shipping — vote, save favorites, and submit your own.',
+    images: ['/api/og?title=AI-built%20apps%2C%20curated.&description=Discover%20the%20best%20vibe-coded%20projects%20from%20indie%20builders.'],
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'VibeBoard — AI-built apps, curated',
+    description:
+      'The best AI-built apps, curated. Explore what indie builders are shipping.',
+    images: ['/api/og?title=AI-built%20apps%2C%20curated.&description=Discover%20the%20best%20vibe-coded%20projects%20from%20indie%20builders.'],
+  },
+}
 
 export default async function Home() {
   let apps: AppWithUser[] = []
